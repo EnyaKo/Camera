@@ -1,8 +1,8 @@
 Use camera and access photo library with Android Studio
 
 ### add the following line in Android Manifest.xml
-<uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+\<uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />\
+\<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 ### Result
 Use camera and show the captured image
