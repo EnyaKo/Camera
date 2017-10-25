@@ -26,10 +26,11 @@ import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
     Button btnTakePhoto;
+    Button btnLoadImg;
     ImageView imgTakenPhoto;
     TextView textTargetUri;
-    ImageView targetImage;
-    static Uri capturedImageUri = null;
+    //ImageView targetImage;
+    Uri capturedImageUri = null;
     String path = "/sdcard/MyImages/img.png";
     File file = new File(path);
 
@@ -45,10 +46,10 @@ public class MainActivity extends AppCompatActivity {
         imgTakenPhoto = (ImageView) findViewById(R.id.imageview1);
         btnTakePhoto.setOnClickListener(new btnTakePhotoClicker());
 
-        Button buttonLoadImage = (Button)findViewById(R.id.loadimage);
+        btnLoadImg = (Button)findViewById(R.id.loadimage);
         textTargetUri = (TextView)findViewById(R.id.targeturi);
-        targetImage = (ImageView)findViewById(R.id.targetimage);
-        buttonLoadImage.setOnClickListener(new btnAccessPhotoClicker());
+        //targetImage = (ImageView)findViewById(R.id.targetimage);
+        btnLoadImg.setOnClickListener(new btnAccessPhotoClicker());
     }
 
     @Override
@@ -56,92 +57,21 @@ public class MainActivity extends AppCompatActivity {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK && requestCode == CAM_REQUEST)
-        {
-            // find the empty temp file created before the intent
-            /*File file = new File(Environment.getExternalStorageDirectory().toString());
-            for(File temp: file.listFiles()) {
-                if(temp.getName().equals("temp.jpg")){
-                    file = temp;
-                    break;
-                }// end of if
-            }// end of for
-
-            try{
-                Bitmap bitmap =  (Bitmap) data.getExtras().get("data");
-                //BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-                //bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                imgTakenPhoto.setImageBitmap(bitmap);
-
-                String path = Environment.getExternalStorageDirectory()
-                        + "/Camera/";
-                OutputStream outFile = null;
-                File file2 = new File(path, "cameraImg.jpg");
-                try{
-                    outFile =new FileOutputStream(file2);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
-                    outFile.flush();
-                    outFile.close();
-                }catch (FileNotFoundException e){
-                    e.printStackTrace();
-                }catch (IOException e){
-                    e.printStackTrace();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }// end of write file try catch
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }*/// end of read and write file try catch
-
-
-            /*Uri targetUri = data.getData();
-            textTargetUri.setText(targetUri.toString());
-            Bitmap bitmap;
+        if(resultCode == RESULT_OK && requestCode == CAM_REQUEST){      // TODO access camera
+            Bitmap imageBitmap;
             try {
-                bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
-                imgTakenPhoto.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e) {
-                // TODO found no libraryfile
-                e.printStackTrace();
-            }*/
-            //try {
-                //Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-                //imgTakenPhoto.setImageBitmap(thumbnail);
-                //Toast.makeText(this, "Image saved to:\n" +
-                //    data.getData(), Toast.LENGTH_LONG).show();
-                //Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), uriSavedImage);
-                //imgTakenPhoto.setImageBitmap(bitmap);
-            /*} catch (FileNotFoundException e) {
-                // TODO found no camerafile
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO fail to find camerafile
-                e.printStackTrace();
-            }*/
-
-            try {
-                // Call function MakeFolder to create folder structure if
-                // its not created
-                Bitmap imageBitmap;
-                //MakeFolder();
-                // Get file from temp1 file where image has been stored
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 3;
                 imageBitmap = BitmapFactory.decodeFile(path, options);
                 imgTakenPhoto.setImageBitmap(imageBitmap);
-                //Uri uri = Uri.fromFile(file);
+
+                /*note: donno why cant get content uri from file path*/
+                //Uri uri = Uri.parse("file://"+path);
+                //textTargetUri.setText(uri.toString());
                 textTargetUri.setText(capturedImageUri.toString());
-                //Uri ImageUri = Uri.fromFile(file);
-                //Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(ImageUri));
-                //imgTakenPhoto.setImageBitmap(bitmap);
+                //imgTakenPhoto.setImageURI(uri);
+                //imgTakenPhoto.setImageURI(capturedImageUri);
 
-
-                //isImageTaken = true;
-                // Name for image
-                //IMAGEPATH = getString(R.string.chassisImage)
-                //        + System.currentTimeMillis();
-                //SaveImageFile(imageBitmap,IMAGEPATH);
             } catch (Exception e) {
                 Toast.makeText(this, "Picture Not taken",
                         Toast.LENGTH_LONG).show();
@@ -149,15 +79,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-        }else if(resultCode == RESULT_OK && requestCode == LIB_REQUEST){
+        }else if(resultCode == RESULT_OK && requestCode == LIB_REQUEST){        // TODO access library
             Uri targetUri = data.getData();
             textTargetUri.setText(targetUri.toString());
             Bitmap bitmap;
             try {
                 bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
-                targetImage.setImageBitmap(bitmap);
+                imgTakenPhoto.setImageBitmap(bitmap);
+                //imgTakenPhoto.setImageURI(targetUri);
             } catch (FileNotFoundException e) {
-                // TODO found no libraryfile
                 e.printStackTrace();
             }
         }
@@ -183,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
     {
         @Override
         public void onClick(View v) {
-            // TODO request access photo library
             Intent intent = new Intent(Intent.ACTION_PICK,
                     android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, LIB_REQUEST);
