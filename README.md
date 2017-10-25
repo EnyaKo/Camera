@@ -6,7 +6,16 @@ Use camera and access photo library with Android Studio
 
 ### Result
 Use camera and show the captured image
+The image is named "img.png" and saved in a new folder in internal storage: file:///sdcard/MyImages/img.png
 <p align="center"/>
-<img src="pic/result.jpg" height="500" />
+<img src="pic/cameraImgShow.jpg" height="500" />
 
-/***note that this program can access photo library but so far unable to show the picked image***/
+Access photo library
+<p align="center"/>
+<img src="pic/libAccess.jpg" height="500" />
+
+Show picked image from photo library
+<p align="center"/>
+<img src="pic/libImgShow.jpg" height="500" />
+
+/***note: working on getting the content uri of camera image file***/
